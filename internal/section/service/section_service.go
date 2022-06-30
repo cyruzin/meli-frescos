@@ -42,7 +42,44 @@ func (s sectionService) Store(ctx context.Context, section *domain.Section) (*do
 }
 
 func (s sectionService) Update(ctx context.Context, section *domain.Section) (*domain.Section, error) {
-	section, err := s.repository.Update(ctx, section)
+	current, err := s.GetByID(ctx, section.ID)
+	if err != nil {
+		return section, err
+	}
+
+	if section.SectionNumber > 0 {
+		current.SectionNumber = section.SectionNumber
+	}
+
+	if section.CurrentTemperature > 0 || section.CurrentTemperature < 0 {
+		current.CurrentTemperature = section.CurrentTemperature
+	}
+
+	if section.MinimumTemperature > 0 || section.MinimumTemperature < 0 {
+		current.MinimumTemperature = section.MinimumTemperature
+	}
+
+	if section.CurrentCapacity > 0 {
+		current.CurrentCapacity = section.CurrentCapacity
+	}
+
+	if section.MinimumCapacity > 0 {
+		current.MinimumCapacity = section.MinimumCapacity
+	}
+
+	if section.MaximumCapacity > 0 {
+		current.MaximumCapacity = section.MaximumCapacity
+	}
+
+	if section.WarehouseID > 0 {
+		current.WarehouseID = section.WarehouseID
+	}
+
+	if section.ProductTypeID > 0 {
+		current.ProductTypeID = section.ProductTypeID
+	}
+
+	section, err = s.repository.Update(ctx, current)
 	if err != nil {
 		return section, err
 	}

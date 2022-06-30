@@ -17,7 +17,7 @@ func NewMariaDBRepository(db *sql.DB) domain.SectionRepository {
 }
 
 func (m mariadbRepository) GetAll(ctx context.Context) (*[]domain.Section, error) {
-	var sections []domain.Section
+	sections := []domain.Section{}
 
 	rows, err := m.db.QueryContext(ctx, "SELECT * FROM sections")
 	if err != nil {
@@ -52,7 +52,7 @@ func (m mariadbRepository) GetAll(ctx context.Context) (*[]domain.Section, error
 func (m mariadbRepository) GetByID(ctx context.Context, id int64) (*domain.Section, error) {
 	row := m.db.QueryRowContext(ctx, "SELECT * FROM sections WHERE ID = ?", id)
 
-	var section domain.Section
+	section := domain.Section{}
 
 	err := row.Scan(
 		&section.ID,
@@ -79,7 +79,7 @@ func (m mariadbRepository) GetByID(ctx context.Context, id int64) (*domain.Secti
 }
 
 func (m mariadbRepository) Store(ctx context.Context, section *domain.Section) (*domain.Section, error) {
-	var newSection domain.Section
+	newSection := domain.Section{}
 
 	query := `INSERT INTO sections 
 	(section_number, current_temperature, minimum_temperature, current_capacity, minimum_capacity, 
@@ -88,14 +88,14 @@ func (m mariadbRepository) Store(ctx context.Context, section *domain.Section) (
 	result, err := m.db.ExecContext(
 		ctx,
 		query,
-		&newSection.SectionNumber,
-		&newSection.CurrentTemperature,
-		&newSection.MinimumTemperature,
-		&newSection.CurrentCapacity,
-		&newSection.MinimumCapacity,
-		&newSection.MaximumCapacity,
-		&newSection.WarehouseID,
-		&newSection.ProductTypeID,
+		&section.SectionNumber,
+		&section.CurrentTemperature,
+		&section.MinimumTemperature,
+		&section.CurrentCapacity,
+		&section.MinimumCapacity,
+		&section.MaximumCapacity,
+		&section.WarehouseID,
+		&section.ProductTypeID,
 	)
 	if err != nil {
 		return &newSection, err
@@ -106,13 +106,13 @@ func (m mariadbRepository) Store(ctx context.Context, section *domain.Section) (
 		return &newSection, err
 	}
 
-	newSection.ID = lastID
+	section.ID = lastID
 
-	return &newSection, nil
+	return section, nil
 }
 
 func (m mariadbRepository) Update(ctx context.Context, section *domain.Section) (*domain.Section, error) {
-	var newSection domain.Section
+	newSection := domain.Section{}
 
 	query := `UPDATE sections SET 
 	section_number=?, current_temperature=?, minimum_temperature=?, current_capacity=?, 
@@ -121,15 +121,15 @@ func (m mariadbRepository) Update(ctx context.Context, section *domain.Section) 
 	result, err := m.db.ExecContext(
 		ctx,
 		query,
-		&newSection.SectionNumber,
-		&newSection.CurrentTemperature,
-		&newSection.MinimumTemperature,
-		&newSection.CurrentCapacity,
-		&newSection.MinimumCapacity,
-		&newSection.MaximumCapacity,
-		&newSection.WarehouseID,
-		&newSection.ProductTypeID,
-		&newSection.ID,
+		&section.SectionNumber,
+		&section.CurrentTemperature,
+		&section.MinimumTemperature,
+		&section.CurrentCapacity,
+		&section.MinimumCapacity,
+		&section.MaximumCapacity,
+		&section.WarehouseID,
+		&section.ProductTypeID,
+		&section.ID,
 	)
 	if err != nil {
 		return &newSection, err
@@ -146,7 +146,7 @@ func (m mariadbRepository) Update(ctx context.Context, section *domain.Section) 
 		return &newSection, err
 	}
 
-	return &newSection, nil
+	return section, nil
 }
 
 func (m mariadbRepository) Delete(ctx context.Context, id int64) error {
