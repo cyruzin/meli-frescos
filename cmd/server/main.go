@@ -8,24 +8,24 @@ import (
 	"github.com/cyruzin/meli-frescos/internal/section/repository/mariadb"
 	"github.com/cyruzin/meli-frescos/internal/section/service"
 	"github.com/gin-gonic/gin"
+
+	_ "github.com/go-sql-driver/mysql"
 )
 
 func main() {
-	router := gin.Default()
 
-	repo := mariadb.NewMariaDBRepository(&sql.DB{})
-	srv := service.NewSection(repo)
-	sectionController, err := controller.NewSectionControler(srv)
+	dataSource := "root:root@tcp(localhost:3306)/bootcamp?parseTime=true"
 
+	conn, err := sql.Open("mysql", dataSource)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("failed to connect to mariadb")
 	}
 
-	router.GET("/api/v1/sections", sectionController.GetAll())
-	router.GET("/api/v1/sections/:id", sectionController.GetById())
-	router.POST("/api/v1/sections", sectionController.Post())
-	router.PATCH("/api/v1/sections/:id", sectionController.Patch())
-	router.DELETE("/api/v1/sections/:id", sectionController.Delete())
+	router := gin.Default()
+
+	repo := mariadb.NewMariaDBRepository(conn)
+	srv := service.NewSection(repo)
+	controller.NewSectionControler(router, srv)
 
 	if err := router.Run(); err != nil {
 		log.Fatal("failed to start the server. err:", err)
