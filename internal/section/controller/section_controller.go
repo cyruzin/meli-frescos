@@ -110,9 +110,8 @@ func (c SectionControler) Post() gin.HandlerFunc {
 			WarehouseID:        req.WarehouseID,
 			ProductTypeID:      req.ProductTypeID,
 		})
-
 		if err != nil {
-			ctx.JSON(http.StatusBadRequest, gin.H{
+			ctx.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
 				"message": err.Error(),
 			})
 			return

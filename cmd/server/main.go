@@ -13,7 +13,6 @@ import (
 )
 
 func main() {
-
 	dataSource := "root:root@tcp(localhost:3306)/bootcamp?parseTime=true"
 
 	conn, err := sql.Open("mysql", dataSource)
