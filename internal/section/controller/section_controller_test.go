@@ -33,7 +33,7 @@ func TestStore(t *testing.T) {
 		sectionsServiceMock.On("Store",
 			mock.Anything,
 			mock.Anything,
-		).Return(mockSection, nil)
+		).Return(mockSection, nil).Once()
 
 		payload, err := json.Marshal(mockSection)
 		assert.NoError(t, err)
@@ -63,7 +63,7 @@ func TestStore(t *testing.T) {
 		sectionsServiceMock.On("Store",
 			mock.Anything,
 			mock.Anything,
-		).Return(mockSectionBad, errors.New("bad request"))
+		).Return(mockSectionBad, errors.New("bad request")).Maybe()
 
 		payload, err := json.Marshal(mockSectionBad)
 		assert.NoError(t, err)
@@ -82,6 +82,8 @@ func TestStore(t *testing.T) {
 		engine.ServeHTTP(rec, req)
 
 		assert.Equal(t, http.StatusBadRequest, rec.Code)
+
+		sectionsServiceMock.AssertExpectations(t)
 	})
 
 	t.Run("fail with internal error", func(t *testing.T) {
