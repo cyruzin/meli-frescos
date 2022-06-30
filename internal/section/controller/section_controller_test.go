@@ -28,7 +28,7 @@ func TestStore(t *testing.T) {
 	}
 
 	t.Run("success", func(t *testing.T) {
-		sectionsServiceMock := new(mocks.SectionService)
+		sectionsServiceMock := mocks.NewSectionService(t)
 
 		sectionsServiceMock.On("Store",
 			mock.Anything,
@@ -57,13 +57,13 @@ func TestStore(t *testing.T) {
 	})
 
 	t.Run("fail with bad request", func(t *testing.T) {
-		sectionsServiceMock := new(mocks.SectionService)
+		sectionsServiceMock := mocks.NewSectionService(t)
 		mockSectionBad := &domain.Section{}
 
 		sectionsServiceMock.On("Store",
 			mock.Anything,
 			mock.Anything,
-		).Return(mockSection, errors.New("bad request"))
+		).Return(mockSectionBad, errors.New("bad request"))
 
 		payload, err := json.Marshal(mockSectionBad)
 		assert.NoError(t, err)
@@ -85,7 +85,7 @@ func TestStore(t *testing.T) {
 	})
 
 	t.Run("fail with internal error", func(t *testing.T) {
-		sectionsServiceMock := new(mocks.SectionService)
+		sectionsServiceMock := mocks.NewSectionService(t)
 		sectionsServiceMock.On("Store",
 			mock.Anything,
 			mock.Anything,

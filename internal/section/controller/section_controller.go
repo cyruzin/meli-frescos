@@ -94,7 +94,7 @@ func (c SectionControler) Post() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		var req requestCreate
 		if err := ctx.ShouldBindJSON(&req); err != nil {
-			ctx.JSON(http.StatusBadRequest, gin.H{
+			ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
 				"message": err.Error(),
 			})
 			return

@@ -12,7 +12,7 @@ import (
 )
 
 func TestStore(t *testing.T) {
-	mockSectionsRepo := new(mocks.SectionRepository)
+	mockSectionsRepo := mocks.NewSectionRepository(t)
 	mockSection := &domain.Section{
 		ID:                 1,
 		SectionNumber:      12,
