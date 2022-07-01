@@ -27,8 +27,9 @@ func TestStore(t *testing.T) {
 		ProductTypeID:      56,
 	}
 
+	sectionsServiceMock := mocks.NewSectionService(t)
+
 	t.Run("success", func(t *testing.T) {
-		sectionsServiceMock := mocks.NewSectionService(t)
 
 		sectionsServiceMock.On("Store",
 			mock.Anything,
@@ -55,7 +56,6 @@ func TestStore(t *testing.T) {
 	})
 
 	t.Run("fail with bad request", func(t *testing.T) {
-		sectionsServiceMock := mocks.NewSectionService(t)
 		mockSectionBad := &domain.Section{}
 
 		sectionsServiceMock.On("Store",
@@ -83,7 +83,6 @@ func TestStore(t *testing.T) {
 	})
 
 	t.Run("fail with internal error", func(t *testing.T) {
-		sectionsServiceMock := mocks.NewSectionService(t)
 		sectionsServiceMock.On("Store",
 			mock.Anything,
 			mock.Anything,
