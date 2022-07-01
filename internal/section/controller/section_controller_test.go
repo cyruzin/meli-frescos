@@ -43,8 +43,6 @@ func TestStore(t *testing.T) {
 
 		_, engine := gin.CreateTestContext(rec)
 
-		NewSectionControler(engine, sectionsServiceMock)
-
 		sc := SectionControler{service: sectionsServiceMock}
 
 		engine.POST("/api/v1/sections", sc.Post())
@@ -73,8 +71,6 @@ func TestStore(t *testing.T) {
 
 		_, engine := gin.CreateTestContext(rec)
 
-		NewSectionControler(engine, sectionsServiceMock)
-
 		sc := SectionControler{service: sectionsServiceMock}
 
 		engine.POST("/api/v1/sections", sc.Post())
@@ -100,8 +96,6 @@ func TestStore(t *testing.T) {
 		rec := httptest.NewRecorder()
 
 		_, engine := gin.CreateTestContext(rec)
-
-		NewSectionControler(engine, sectionsServiceMock)
 
 		sc := SectionControler{service: sectionsServiceMock}
 
