@@ -86,7 +86,7 @@ func TestStore(t *testing.T) {
 		sectionsServiceMock.On("Store",
 			mock.Anything,
 			mock.Anything,
-		).Return(nil, errors.New("internal error"))
+		).Return(nil, errors.New("internal error")).Maybe()
 
 		payload, err := json.Marshal(mockSection)
 		assert.NoError(t, err)
